@@ -39,6 +39,8 @@ module RailsRunjournalApp
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
+    config.autoload_paths << Rails.root.join('app/controllers')
+    # config.autoload_paths += Dir[Rails.root.join('app', 'controllers', 'api', 'v1', '**/')]
     config.api_only = true
   end
 end

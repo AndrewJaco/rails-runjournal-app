@@ -1,11 +1,20 @@
 # frozen_string_literal: true
 
-class Users::RegistrationsController < Devise::RegistrationsController
+class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
   include RackSessionFix
   respond_to :json
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
 
+  def create
+    build_resource(sign_up_params)
+
+    if User.exists?(email: sign_up_params[:email])
+      render json: { error: "Email already exists" }, status: :unprocessable_entity
+    else
+       
+    end 
+  end
   # GET /resource/sign_up
   # def new
   #   super
@@ -63,6 +72,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   private
+
+  def sign_up_params
+    params.require(:user).permit(:email, :password, :password_confirmation)
+  end
 
   def respond_with(resource, _opts = {})
     if request.method == "POST" && resource.persisted?
